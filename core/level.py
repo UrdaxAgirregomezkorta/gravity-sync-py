@@ -107,7 +107,7 @@ class Level:
     # =========================================================
     # UPDATE
     # =========================================================
-    def update(self):
+    def update(self, mouse_clicked=False):
         if self.is_dying:
             self.flash_time += 1
 
@@ -120,7 +120,12 @@ class Level:
 
             return None
 
+        # atualizar cubo
         self.cube.update(self.platforms)
+        
+        # mudar gravidade com mouse
+        if mouse_clicked:
+            self.cube.handle_gravity_mouse(True)
         self.diamonds.update()
         self.gears.update()
         self.door.update()

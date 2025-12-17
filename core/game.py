@@ -33,7 +33,13 @@ class Game:
 
         # ================= PLAYING =================
         elif self.state == "PLAYING":
-            result = self.level.update()
+            # detectar click izquierdo
+            mouse_clicked = False
+            for event in events:
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    mouse_clicked = True
+            
+            result = self.level.update(mouse_clicked)
             self.level.draw(self.screen)
 
             # -------- DERROTA (RESTART) --------
