@@ -35,25 +35,29 @@ class Cube(pygame.sprite.Sprite):
 
     # movimento com setas (com rotação visual)
     def handle_movement(self, keys):
-        if self.gravity.y != 0:  # gravidade vertical
+        if self.gravity.y != 0:  # gravidade vertical (DOWN ou UP)
+            # Movimiento horizontal con LEFT/RIGHT
             if keys[pygame.K_LEFT]:
                 self.velocity.x = -5
-                self.rotate_cube(-5)  # rotação anti-horária
+                self.rotate_cube(-5)
             elif keys[pygame.K_RIGHT]:
                 self.velocity.x = 5
-                self.rotate_cube(5)  # rotação horária
+                self.rotate_cube(5)
             else:
                 self.velocity.x = 0
             
-            # SALTO com seta para cima (quando gravidade é vertical)
-            if keys[pygame.K_UP] and self.on_surface:
-                if self.gravity.y > 0:  # gravidade para baixo
+            # SALTO oposto à gravidade
+            if self.gravity.y > 0:  # gravidade para baixo → salto com UP
+                if keys[pygame.K_UP] and self.on_surface:
                     self.velocity.y = -self.jump_strength
-                else:  # gravidade para cima
+                    self.on_surface = False
+            else:  # gravidade para cima → salto com DOWN
+                if keys[pygame.K_DOWN] and self.on_surface:
                     self.velocity.y = self.jump_strength
-                self.on_surface = False
+                    self.on_surface = False
                     
-        else:  # gravidade horizontal
+        else:  # gravidade horizontal (LEFT ou RIGHT)
+            # Movimiento vertical con UP/DOWN
             if keys[pygame.K_UP]:
                 self.velocity.y = -5
                 self.rotate_cube(-5)
@@ -63,13 +67,15 @@ class Cube(pygame.sprite.Sprite):
             else:
                 self.velocity.y = 0
             
-            # SALTO com seta para direita (quando gravidade é horizontal)
-            if keys[pygame.K_RIGHT] and self.on_surface:
-                if self.gravity.x > 0:  # gravidade para direita
+            # SALTO oposto à gravidade
+            if self.gravity.x > 0:  # gravidade para direita → salto com LEFT
+                if keys[pygame.K_LEFT] and self.on_surface:
                     self.velocity.x = -self.jump_strength
-                else:  # gravidade para esquerda
+                    self.on_surface = False
+            else:  # gravidade para esquerda → salto com RIGHT
+                if keys[pygame.K_RIGHT] and self.on_surface:
                     self.velocity.x = self.jump_strength
-                self.on_surface = False
+                    self.on_surface = False
 
     # gravidade controlada por mouse (mudado via eventos)
     def handle_gravity_mouse(self, mouse_button):
